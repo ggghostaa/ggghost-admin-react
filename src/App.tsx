@@ -1,12 +1,13 @@
 import React from 'react';
 import './App.css';
+import SliderVertify from "./components/sliderVertify";
+
 
 function App() {
   return (
     <div className="App">
-        <div className='temp' style={{ width: 200}}>
-            temp
-        </div>
+
+        <SliderVertify></SliderVertify>
 
     </div>
   );
