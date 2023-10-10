@@ -66,7 +66,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -88,7 +89,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "axios": "^1.5.1",
+    "axios": "^1.2.0-alpha.1",
     "less": "^4.2.0",
     "less-loader": "^5.0.0"
   },

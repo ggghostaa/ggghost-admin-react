@@ -1,9 +1,12 @@
 import React, { useRef, useState, useEffect, ReactNode, memo } from 'react';
 import { getRandomNumberByRange, sum, square } from '../../utils/tool';
+import {Button} from "antd";
 import './index.less';
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 interface VertifyType {
-    spliced: boolean;
+    spliced: boolean ;
     verified: boolean; // 简单验证拖动轨迹，为零时表示Y轴上下没有波动，可能非人为操作
     left: number; // 滑块的移动位置
     destX: number; // 滑块的目标位置
@@ -202,21 +205,21 @@ export default memo(
         };
 
         const reset = () => {
-            const canvasCtx = canvasRef.current.getContext('2d');
-            const blockCtx = blockRef.current.getContext('2d');
-            // 重置样式
-            setSliderLeft(0);
-            setSliderClass('sliderContainer');
-            blockRef.current.width = width;
-            blockRef.current.style.left = 0 + 'px';
-
-            // 清空画布
-            canvasCtx.clearRect(0, 0, width, height);
-            blockCtx.clearRect(0, 0, width, height);
-
-            // 重新加载图片
-            setLoading(true);
-            imgRef.current.setSrc(getRandomImgSrc());
+            // const canvasCtx = canvasRef.current.getContext('2d');
+            // const blockCtx = blockRef.current.getContext('2d');
+            // // 重置样式
+            // setSliderLeft(0);
+            // setSliderClass('sliderContainer');
+            // blockRef.current.width = width;
+            // blockRef.current.style.left = 0 + 'px';
+            //
+            // // 清空画布
+            // canvasCtx.clearRect(0, 0, width, height);
+            // blockCtx.clearRect(0, 0, width, height);
+            //
+            // // 重新加载图片
+            // setLoading(true);
+            // imgRef.current.setSrc(getRandomImgSrc());
         };
 
         const handleRefresh = () => {
@@ -288,10 +291,55 @@ export default memo(
         };
 
         useEffect(() => {
-            if (visible) {
-                imgRef.current ? reset() : initImg();
-            }
+            test()
+            // if (visible) {
+            //     reset();
+            //     imgRef.current ? reset() : initImg();
+            // }
         }, [visible]);// eslint-disable-line
+
+        /**
+         * ============
+         */
+        const test = () =>{
+
+            fetch('http://localhost:7001/gen')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    // const  canData = {
+                    //     canvasWidth: data.canvasWidth,
+                    //     canvasHeight: data.canvasHeight,
+                    //     blockWidth: l * 2 / 1.5,
+                    //     blockHeight: l * 2 / 1.5,
+                    //     blockRadius: r,
+                    //     place: 1
+                    // }
+                    // blockRef.current.src = data.blockSrc;
+                    // canvasRef.current.src = data.canvasSrc;
+                    // blockRef.current.style.top = '20px';
+                    // console.log('can:',canvasRef.current.src)
+                    // console.log('blo:', blockRef.current.src)
+                    const imageC = new Image();
+                    imageC.src = data.canvasSrc;
+                    const  canvasCtx = canvasRef.current.getContext('2d');
+                    imageC.onload = () => {
+                        canvasCtx.drawImage(imageC, 0,0)
+                    }
+                    const imageB = new Image();
+                    imageB.src = data.blockSrc;
+                    const blockCtx = canvasRef.current.getContext('2d');
+                    imageB.onload = () => {
+                        blockCtx.drawImage(imageB, 0, 0)
+                    }
+                    imgRef.current = imageC
+                    console.log(blockCtx.getImageData(1,1,1,1))
+                    xRef.current = data.blockX;
+                    yRef.current = data.blockY;
+                    blockCtx.moveTo(data.blockX, data.blockY)
+                })
+                .catch(error => console.log('Error', error))
+        }
 
         return (
             <div
@@ -306,6 +354,7 @@ export default memo(
                 onTouchMove={handleDragMove}
                 onTouchEnd={handleDragEnd}
             >
+                <Button onClick={test}>test</Button>
                 <div className="canvasArea">
                     <canvas ref={canvasRef} width={width} height={height}></canvas>
                     <canvas
