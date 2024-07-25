@@ -1,18 +1,19 @@
+
 import React, {useEffect, useRef, useState} from "react";
 import './vertify.css'
 
 // eslint-disable-next-line no-unused-vars
 interface CaptchaResult {
     /** 验证码类型.*/
-     type: string;
+    type: string;
     /** 背景图.*/
-     backgroundImage: string;
+    backgroundImage: string;
     /** 移动图.*/
-     templateImage: string;
+    templateImage: string;
     /** 背景图片所属标签. */
-     backgroundImageTag: string;
+    backgroundImageTag: string;
     /** 模板图片所属标签. */
-     templateImageTag: string;
+    templateImageTag: string;
     /** 背景图片宽度.*/
     backgroundImageWidth: number;
     /** 背景图片高度.*/
@@ -37,8 +38,8 @@ const Vertify: React.FC = () => {
     const isMouseDown =useRef(false);
 
     const [currentCaptchaId, setCurrentCaptchaId] = useState('');
-    const [sliderSrc, setSliderSrc] = useState('');
-    const [backgroundSrc, setBackgroundSrc] = useState('');
+    const [sliderImage, setSliderImage] = useState('');
+    const [backgroundImage, setBackgroundImage] = useState('');
 
     const sliderTranslate = useRef('translate(0px, 0px)');
     const btnTranslate = useRef('translate(0px, 0px)');
@@ -69,8 +70,8 @@ const Vertify: React.FC = () => {
             .then(data => {
                 const captcha: CaptchaResult = data.captcha;
                 setCurrentCaptchaId(data.id)
-                setBackgroundSrc(captcha.backgroundImage)
-                setSliderSrc(captcha.templateImage)
+                setBackgroundImage(captcha.backgroundImage)
+                setSliderImage(captcha.templateImage)
 
             })
             .catch(error => console.log('Error', error))
@@ -169,10 +170,10 @@ const Vertify: React.FC = () => {
         <div className="slider">
             <div className="content">
                 <div className="bg-img-div" style={{transform: bgTranslate.current}}>
-                    <img id="bg-img" src={backgroundSrc}/>
+                    <img id="bg-img" src={backgroundImage}/>
                 </div>
                 <div className="slider-img-div" style={{transform: translate}}>
-                    <img id="slider-img" src={sliderSrc}/>
+                    <img id="slider-img" src={sliderImage}/>
                 </div>
             </div>
             <div className="slider-move">
